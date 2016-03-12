@@ -38,7 +38,7 @@ So did a quick trial-balloon and rewrote the application in Go,
 
 * Hello World
 
-.play 01-hello-world.go
+.play code/01-hello-world.go
 
 ### Introduce the package export rules
 ### Introduce the camel-case
@@ -61,7 +61,7 @@ Note: `int` and `uint` are the natural or most efficient size for integers on a 
 
 * Variable Declaration
 
-.play 02-hello-world-with-types.go
+.play code/02-hello-world-with-types.go
 
 ### Use this page to show:
 ## - implicit type declaration
@@ -72,7 +72,7 @@ Note: `int` and `uint` are the natural or most efficient size for integers on a 
 
 * Celcius & Farenheit
 
-.play 03-simple-temp.go
+.play code/03-simple-temp.go
 
 ## - talk about utf8 program files and unicode strings
 
@@ -118,7 +118,7 @@ A simple `if` statement:
 
 * If statement (playground)
 
-.play 04-if.go
+.play code/04-if.go
 
 * Switch statement
 
@@ -282,7 +282,7 @@ Arrays is a *fixed-length* sequence of zero or more elements. Since they are fix
 
 * Arrays (playground)
 
-.play 05-arrays.go
+.play code/05-arrays.go
 
 * Slices
 
@@ -319,7 +319,7 @@ Slices are backed by an array which the Go runtime, talk about the length and ca
 
 * Slices (playground)
 
-.play 06-slices.go
+.play code/06-slices.go
 
 - The built-in `len` function returns the length of the slice.
 - The built-in `cap` function returns the current capacity of the slice.
@@ -328,7 +328,7 @@ Slices are backed by an array which the Go runtime, talk about the length and ca
 
 Slices can be created from existing slices and arrays:
 
-.play 07-slices-op.go
+.play code/07-slices-op.go
 
 * Maps
 
@@ -740,7 +740,7 @@ Concurrency provides a way to structure a solution to solve a problem that may (
 
 * Goroutines are not threads
 
-They're a bit like threads, but cheaper. Small and resizeable stacks (2KB) versus 1MB for threads.
+They're a bit like threads, but cheaper, small and resizeable stacks (2KB versus 2MB for threads).
 
 Common to launch a large number of goroutines during the life of an application.
 
@@ -759,14 +759,72 @@ The Go runtime multiplexes goroutines across OS threads.
         time.Sleep(2*time.Second)
     }
 
+* Channels
 
-- Goroutines definition
-- ping/pong example
-- buffered and unbuffered channels
-- select statment
-- mention other types of `sync` locking
-- relations with threads (large 2MB stack vs 2KB for a goroutine)
-- Goroutine scheduling is done by the Go runtime
+Channels provide communication and synchronization mechanisms between goroutines. Each channel provides a conduit for values of a particular types.
+
+    var chInt chan int // A channel of integers
+    var chPtr chan *int // A channel of integer pointers
+
+A channel is created with the built-in `make` function:
+
+    chInt = make(chan int)
+
+    chInt <- 42 // Send a value on the channel (blocks until another goroutine reads from chInt)
+
+    // Reads a value (blocks until another goroutine is writing to chInt)
+    v := <- chInt
+
+    // Channels can be used with for/range loop
+    for v := range chInt {
+        // Do something with v
+    }
+
+    // Close a channel
+    close(chInt)
+
+* Ping-Pong
+
+    type Ball struct{ hits int }
+
+    func main() {
+        table := make(chan *Ball)
+        go player("ping", table)
+        go player("pong", table)
+
+        table <- new(Ball) // game on; toss the ball
+        time.Sleep(1 * time.Second)
+        <-table // game over; grab the ball
+    }
+
+    func player(name string, table chan *Ball) {
+        for {
+            ball := <-table
+            ball.hits++
+            fmt.Println(name, ball.hits)
+            time.Sleep(100 * time.Millisecond)
+            table <- ball
+        }
+    }
+
+* More Concurrency
+
+Go has a `select` statement that can multiplex multiple channels, similar to C's `select()` function for file handles or a `switch` statement.
+
+    select {
+    case v := <- ch1:
+        // do something with v
+
+    case ch2 <- "a string":
+
+    default:
+        // default is optional, if it's absent the whole select blocks until a case is ready
+    }
+
+Go also has a package `sync` and `sync/atomic` that provides regular synchronization mechanisms:
+
+- sync.Mutex, sync.RWMutex, sync.WaitGroup
+- atomic.CompareAndSwap, atomic.AddInt
 
 * Packages
 

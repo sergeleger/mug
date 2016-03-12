@@ -118,22 +118,13 @@ A simple `if` statement:
 
 * If statement (playground)
 
-.play code/04-if.go
+.play code/04-if.go /func main/,/^}/
 
 * Switch statement
 
 A simple C-like `switch` statement:
 
-    switch coinFlip() {
-    case "heads":
-        heads++
-
-    case "tails":
-        tails++
-
-    default:
-        fmt.Println("landed on edge!")
-    }
+.play code/05-switch.go /func main/,/^}/
 
 - No `break` statement required, by default cases do not fall through.
 - Use the `fallthrough` statement if that behavior is needed.
@@ -142,28 +133,13 @@ A simple C-like `switch` statement:
 
 - Instead of using `fallthrough`, case statements can be combined:
 
-    switch dayOfWeek {
-    case "Saturday", "Sunday":
-        fmt.Println("It's the weekend!")
-
-    default:
-        fmt.Println("Get up and go to work.")
-    }
+.play code/06-switch.go /func main/,/^}/
 
 * Switch statement (continued)
 
 - The switch's expression is optional, so a switch statement can be used to replace long and complex `if`/`else` cascades:
 
-    switch {
-    case dayOfWeek == "Saturday" || dayOfWeek == "Sunday":
-        fmt.Println("It's the weekend!")
-
-    case dayOfWeek == "Wednesday" && weekNumber % 2 == 0:
-        fmt.Println( "Payday!")
-
-    default:
-        fmt.Println("Get up and go to work.")
-    }
+.play code/07-switch.go /func main/,/^}/
 
 * For statement
 
@@ -171,9 +147,6 @@ Go has a single loop statement; the `for` loop has multiple forms:
 
     // C style
     for initialization; condition; post {
-    }
-
-    for i := 0; i<10; i++ {
     }
 
 Both, _initialization_ and _post_ are optional:
@@ -192,12 +165,9 @@ _condition_ is also optional and defaults to `true`:
 
 - `break` statement terminates the execution of the inner-most loop
 - `continue` statement begins the next iteration of the inner-most loop
-- There is also a "for-each" operator: `range` which operates on arrays, slices, maps and channels.
+- There is also a "for-each" operator: `range` which operates on strings, arrays, slices, maps and channels.
 
-    dwarves := [7]string{"Doc", "Grumpy", "Happy", "Sleepy", "Bashful", "Sneezy", "Dopey"}
-    for index, name := range arr {
-        fmt.Println( index, name )
-    }
+.play code/08-for.go /func main/,/^}/
 
 * Constants, Custom Types, and Enumerated Types
 
@@ -205,35 +175,19 @@ _condition_ is also optional and defaults to `true`:
 
 Constants are defined with the `const` keyword:
 
-    const Pi = 3.141592
-    const (
-        a = 1
-        b = 2
-        c = 3
-        d = 4
-    )
-    const a, b, c, d = 1, 2, 3, 4
+.play code/09-constants.go /const/,/^}/
+
+* Iota
 
 Go provides the `iota` constant generator to help construct constant values:
 
-    const (
-        Monday = iota
-        Tuesday
-        Wednesday
-        Thursday
-        //...
-    )
+.play code/10-constants.go /const/,/^}/
 
 * Custom Types
 
 Using the `type` keyword we can create custom types:
 
-    type Color uint64
-
-    // Same rules apply, you cannot assign a Color value to an uint64 variable
-    var red Color = 1
-    var value uint64
-    value = red // compilation error
+.play code/11-types.go /type/,/^}/
 
 * Enumerated Types
 

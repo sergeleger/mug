@@ -165,7 +165,7 @@ _condition_ is also optional and defaults to `true`:
 
 - `break` statement terminates the execution of the inner-most loop
 - `continue` statement begins the next iteration of the inner-most loop
-- There is also a "for-each" operator: `range` which operates on strings, arrays, slices, maps and channels.
+- There is also a "for-each" operator: `range` which operates on `strings`, `arrays`, `slices`, `maps` and `channels`.
 
 .play code/08-for.go /func main/,/^}/
 
@@ -236,7 +236,7 @@ Arrays is a *fixed-length* sequence of zero or more elements. Since they are fix
 
 * Arrays (playground)
 
-.play code/05-arrays.go
+.play code/12-arrays.go
 
 * Slices
 
@@ -252,111 +252,60 @@ Slices represents variable-length sequences, like arrays, slices are indexable a
     // The same declaration
     var ip = []byte{192, 168, 1, 1}
 
+- `make` is a built-in function to create a new slice.
+- `len` returns the length of the slice.
+- `cap` returns the capacity of the slice.
+- `append` appends elements to the slice.
+
 * Slice Construction
 
-A slice can be constructed using the `make` built-in function, providing a length and a default capacity.
+A slice can be constructed using the `make` built-in function, providing a length and optionally an initial capacity.
 
-    ids := make([]int, 5)
-    ids[0] = 2
-    ids[1] = 15
+.play code/13-slices.go /func main/,/^}/
 
-    ids = make([]int, 5, 10)
-    ids[0] = 1
-    ids[4] = 16
-    ids[5] = 42 // panics: overflow error
-    ids = append(ids, 42)
-    fmt.Println(ids[5] == 42) // prints true
+Slices are backed by an array which Go grows to accommodate new elements.
 
-Slices are backed by an array which the Go runtime, talk about the length and capacity and pointer to array.
+* Length and Capacity
 
-- The built-in `make` function can be used to create a new slice.
-
-* Slices (playground)
-
-.play code/06-slices.go
-
-- The built-in `len` function returns the length of the slice.
-- The built-in `cap` function returns the current capacity of the slice.
+.play code/14-slices.go /func main/,/^}/
 
 * Slice Operators
 
-Slices can be created from existing slices and arrays:
+Go provides slice operators to create different views of the same in-memory array:
 
-.play code/07-slices-op.go
+    var newSlice = slice[start:end] // start is inclusive and end is exclusive.
+
+.play code/15-slices-op.go /func main/,/^}/
 
 * Maps
 
-Maps are Go's implementation of associative arrays.
+Maps are Go's implementation of associative arrays. Maps are expressed as follows:
 
-    var capitals = map[string]string{
-        "NB": "Fredericton",
-        "NS": "Halifax",
-        "QC": "Quebec",
-    }
-    fmt.Println(capitals["NB"])
-    fmt.Println(capitals["ON"])
+    map[KeyType]ValueType
 
-    // Check if a key exists
-    city, ok := capitals["ON"]
-    if ok {
-        fmt.Println("Ontario's capital is", city)
-    }
+.play code/16-maps.go /func main/,/^}/
 
 * Map Construction
 
 Maps must be created using the `make` built-in function:
 
-    capitals := make(map[string]string, 13) // initial space for 13 provinces
-    capitals["NB"] = "Fredericton"
-    capitals["ON"] = "Toronto"
-    // ...
+.play code/17-maps.go /func main/,/^}/
 
-* Struct Types
+- `make` is a built-in function to create a new map.
+- `len` returns the length of the map.
+- `delete` removes an entry from the map.
 
-A structures is a sequence of fields, each of which has a name and a type.
+* Structures
 
-    type Person struct {
-        Name   string
-        Street string
-        City   string
-    }
+A structure is a sequence of fields, each of which has a name and a type.
 
-    var bob Person
-    bob.Name = "Bob"
-    bob.Street = "123 Street"
-    bob.City = "Somewhere, OH"
-
-    // Using struct literals
-    var charles = Person{
-        Name:   "Chuck",
-        Street: "456 Street",
-        City:   "Somecity, ME",
-    }
+.play code/18-struct.go  /START OMIT/,/END OMIT/
 
 * Embedding structures
 
 Go does not have inheritance, instead, we use type composition:
 
-    type Employee struct {
-        Person
-        Id string
-    }
-
-    var bob Employee
-    bob.Id = "123"
-    bob.Name = "Bob"
-    bob.Street = "123 Street"
-    bob.City = "Somewhere, OH"
-
-    // Using struct literals
-    var charles = Employee{
-        Person: Person{
-            Name:   "Chuck",
-            Street: "456 Street",
-            City:   "Somecity, ME",
-        },
-        Id: "456",
-    }
+.play code/19-struct.go /START OMIT/,/END OMIT/
 
 * Functions
 
@@ -368,79 +317,29 @@ Function declaration has a name, a list of parameters, an optional list of resul
         body
     }
 
-    func max(x int, y int) int {
-        if x > y {
-            return x
-        } else {
-            return y
-        }
-    }
-
-- Function parameters can be simplified to avoid repeating types:
-
-    func max(x, y int) int { ... }
+.play code/20-functions.go /START OMIT/,/END OMIT/
 
 * Functions with multiple return values
 
 Functions can return multiple values, this is often used to return error conditions.
 
-    func swap(x, y int) (int, int) {
-        t := x
-        x = y
-        y = t
-        return x, y
-    }
-
-    func safeSwap(x, y int) (int, int, error) {
-        if x < 0 || y < 0 {
-            return x, y, errors.New("can't swap negative numbers")
-        }
-        return y, x, nil
-    }
+.play code/21-functions.go /START OMIT/,/END OMIT/
 
 * Functions are first-class values
 
-    func square(n int) int { return n*n }
-    func negative(n int) int { return -n }
-    func product( n, m int) int { return n*m }
+.play code/22-functions.go /START1 OMIT/,/END1 OMIT/
 
-    f := square
-    fmt.Println(f(5), square(5))
+* Closures
 
-    f = negative
-    fmt.Println(f(5))
-
-    func newProductFunc( n int ) func(int) int {
-        return func(m int) int {
-            return n*m
-        }
-    }
+.play code/22-functions.go /START3 OMIT/,/END3 OMIT/
 
 * Variadic functions
 
-    func max( numbers ...int ) int {
-        m := 0
-        for _, v := range numbers {
-            if v > m {
-                m = v
-            }
-        }
-
-        return m
-    }
+.play code/23-functions.go /START OMIT/,/END OMIT/
 
 * Deferred Functions
 
 The execution of a function can be deferred until the enclosing function returns. This is normally used with paired operations like open and close or lock and unlock.
-
-    func max(x, y int) int {
-        defer fmt.Printf("Input parameters: max(%d, %d)\n", x, y)
-        if x>y {
-            return x
-        }
-        fmt.Println( "Returning with max=Y=", y)
-        return y
-    }
 
     func readFile(filename string) {
         fh, err := os.Open(filename)
@@ -452,14 +351,15 @@ The execution of a function can be deferred until the enclosing function returns
         // ... process file ...
     }
 
+* Deferred example
+
+.play code/24-functions.go /START OMIT/,/END OMIT/
+
 * Objects
 
 * Objects
 
 In Go an object is simply a variable or value that has methods, a method is a function associated with a particular type.
-
-- There is no inheritance in Go instead types are composed.
-- There are no constructors or destructors either.
 
 Here is generic method definition:
 
@@ -467,46 +367,22 @@ Here is generic method definition:
         body
     }
 
-* Objects (continued)
+- There is no inheritance in Go instead types are composed.
+- There are no constructors or destructors either.
 
-    type Point struct {
-        X, Y float64
-    }
+* Objects Example
 
-    func Distance(p, q Point) float64 {
-        return math.Hypot(p.X-q.X, p.Y-q.Y)
-    }
-
-    func (this Point) Distance(q Point) float64 {
-        return math.Hypot(this.X-q.X, this.Y-q.Y)
-    }
+.play code/25-objects.go /START OMIT/,/END OMIT/
 
 * Methods with Pointer Receivers
 
-The `Point.Distance` method uses a pass-by-value receiver meaning that any changes made to the `point` variable will be lost. Instead we can use a *pointer receiver*
+The `Point.Distance` method uses a pass-by-value receiver meaning that any changes made to the `point` variable will be lost. Instead we can use a *pointer*receiver*
 
-    func (point *Point) ScaleBy(n float64) {
-        point.X *= n
-        point.Y *= n
-    }
-
-    point.ScaleBy(3)
-    fmt.Println(point)
+.play code/26-objects.go /START OMIT/,/END OMIT/
 
 * Object Composition
 
-    type ColoredPoint struct {
-        Point
-        Color string
-    }
-
-    cpRed := ColoredPoint{ Point{1,2}, "red" }
-    cpBlue := ColoredPoint{ Point{2,3}, "blue" }
-
-    fmt.Println(cpRed.Distance(Point{3,4}))
-    fmt.Println(cpRed.Point.Distance(Point{3,4}))
-    fmt.Println(cpRed.Distance(cpBlue)) // compile error
-
+.play code/27-objects.go /START OMIT/,/END OMIT/
 
 * Interfaces
 
@@ -545,132 +421,49 @@ Interfaces in Go are similar to interfaces from Java. Here is a generic interfac
 
 * Implementation of the io.Reader interface
 
-    type myReader uint8
+.play code/28-interface.go /START OMIT/,/END OMIT/
 
-    func (r myReader) Read(p []byte) (int, error) {
-        for i := range p {
-            p[i] = byte(r)
-        }
-        return len(p), nil
-    }
+* Interfaces
 
-    func main() {
-        var reader myReader = 65
-        io.Copy(os.Stdout, reader)
+.code code/29-interface.go /SHAPE OMIT/,/SHAPEEND OMIT/
 
-        // io.LimitedReader{r, 10}
-    }
+.code code/29-interface.go /SQUARE OMIT/,/ENDSQUARE OMIT/
+
+.code code/29-interface.go /CIRCLE OMIT/,/ENDCIRCLE OMIT/
 
 * Interfaces (playground)
 
-    type Shape interface {
-        Area() float64
-    }
-
-    type Square struct { side float64 }
-    type Circle struct { radius float64 }
-
-    func (sq *Square) Area() float64 { return sq.side * sq.side }
-    func (c *Circle) Area() float64 { return math.PI * math.Pow(c.radius, 2) }
-
+.play code/29-interface.go /START OMIT/,/END OMIT/
 
 * Empty Interface
 
 An empty interface is an interface with no methods -- meaning that everything in Go satisfies the empty interface. This is similar to Java's `Object`. The interface type is written `interface{}`:
 
-    var f interface{} = 1.0
+    var f interface{}
 
-    func describe(v interface{}) { fmt.Printf( "(%T, %v)\n", v, v) }
-
-    var f32 float32 = 21
-    var f64 float64 = 42
-    var i int = 10
-    var s string = "A string"
-
-    describe(f32)
-    describe(f64)
-    describe(i)
-    describe(s)
+.play code/30-empty-interface.go /START OMIT/,/END OMIT/
 
 * Type Assertions
 
 Sometimes it is useful to either convert an interface to its underlying type or to convert it to another interface.
 
-    func readAndClose( r io.Reader) {
-        // read data from r
+.play code/31-type-assertion.go /START OMIT/,/END OMIT/
 
-        // Close the file if it implements the io.Closer interface
+* A complex type assertion example
 
-        // Type Assertion
-        closer := r.(io.Closer)
-        if ok {
-            fmt.Println( "Closing the file" )
-            closer.Close()
-        }
-    }
-
-    func main() {
-        var reader myReader = 65
-        readAndClose(reader)
-
-        readAndClose(os.Stdin)
-    }
+.code code/32-type-assertion.go /DOUBLESTART OMIT/,/DOUBLEEND OMIT/
 
 * From Type Assertions to Type Switches
 
-    func double(x interface{}) interface{} {
-        if x, ok := x.(int); ok {
-            return x*2
-        } else if x, ok := x.(*int); ok {
-            return (*x) * 2
-        } else if x, ok := x.(float32); ok {
-            return x*2
-        } else if x, ok := x.(float64); ok {
-            return x*2
-        } else {
-            log.Fatalf("unsupported type: %T", x)
-        }
-    }
-
-    func main() {
-        fmt.Println( double(float32(5.5)) )
-        fmt.Println( double(float64(5.5)) )
-        fmt.Println( double(int(5)) )
-        fmt.Println( double(uint(5)) )
-
-        var i := 15
-        fmt.Println( double(i) )
-        fmt.Println( double(&i) )
-    }
+.play code/32-type-assertion.go /MAIN OMIT/,/MAINEND OMIT/
 
 * Type Switches
 
-    func double(x interface{} ) interface{} {
-        switch x := x.(type) {
-        case int:
-            return x*2
-        case float32:
-            return x*2
-        case float64:
-            return x*2
-        case *int:
-            return *x * 2
+.code code/32-type-assertion.go /DOUBLESWITCHSTART OMIT/,/DOUBLESWITCHEND OMIT/
 
-        default:
-            log.Fatalf("unsupported type: %T", x)
-        }
-    }
+* Type Switches
 
-    func main() {
-        fmt.Println( double(float32(5.5)) )
-        fmt.Println( double(float64(5.5)) )
-        fmt.Println( double(int(5)) )
-        fmt.Println( double(uint(5)) )
-
-        var i := 15
-        fmt.Println( double(i) )
-        fmt.Println( double(&i) )
-    }
+.play code/32-type-assertion.go /MAIN OMIT/,/MAINEND OMIT/
 
 * Concurrency
 
@@ -694,7 +487,7 @@ Concurrency provides a way to structure a solution to solve a problem that may (
 
 * Goroutines are not threads
 
-They're a bit like threads, but cheaper, small and resizeable stacks (2KB versus 2MB for threads).
+They're a bit like threads, but cheaper. Small and resizeable stacks (~2KB versus ~1MB for threads).
 
 Common to launch a large number of goroutines during the life of an application.
 
@@ -702,16 +495,7 @@ The Go runtime multiplexes goroutines across OS threads.
 
 * Goroutines (launch and forget)
 
-    func say(str string) {
-        fmt.Println( str )
-    }
-
-    func main() {
-        go say("Hello, World!")
-        say("All Done!")
-
-        time.Sleep(2*time.Second)
-    }
+.play code/33-goroutine.go /START OMIT/,/END OMIT/
 
 * Channels
 
@@ -739,27 +523,7 @@ A channel is created with the built-in `make` function:
 
 * Ping-Pong
 
-    type Ball struct{ hits int }
-
-    func main() {
-        table := make(chan *Ball)
-        go player("ping", table)
-        go player("pong", table)
-
-        table <- new(Ball) // game on; toss the ball
-        time.Sleep(1 * time.Second)
-        <-table // game over; grab the ball
-    }
-
-    func player(name string, table chan *Ball) {
-        for {
-            ball := <-table
-            ball.hits++
-            fmt.Println(name, ball.hits)
-            time.Sleep(100 * time.Millisecond)
-            table <- ball
-        }
-    }
+.play code/34-pingpong.go /START OMIT/,/END OMIT/
 
 * More Concurrency
 

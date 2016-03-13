@@ -9,5 +9,7 @@ func main() {
 		"Saturday",
 	}
 
-	fmt.Println(daysOfWeek[0])
+	fmt.Println("Number of entries: ", len(daysOfWeek))
+	fmt.Println("First day:", daysOfWeek[0])
+	fmt.Printf("%T", daysOfWeek)
 }

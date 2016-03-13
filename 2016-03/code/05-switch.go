@@ -12,7 +12,7 @@ func coinFlip() string {
 	n := rand.Intn(100)
 	if n < 40 {
 		return "heads"
-	} else if n < 45 {
+	} else if n < 80 {
 		return "tails"
 	} else {
 		return ""

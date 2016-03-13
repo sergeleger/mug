@@ -6,5 +6,5 @@ var name string = "Serge"
 
 func main() {
 	var age int = 40
-	fmt.Printf( "Hello, World! My name is %s, and I'm %d (ish).", name, age)
+	fmt.Printf("Hello, World! My name is %s, and I'm %d (ish).\n", name, age)
 }

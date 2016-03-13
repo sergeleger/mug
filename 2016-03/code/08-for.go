@@ -13,14 +13,14 @@ var dwarves = [7]string{
 }
 
 func main() {
-	// C style loop
+	// C style loop  // HL
 	for i := 0; i < 7; i++ {
 		fmt.Println(dwarves[i])
 	}
 
 	fmt.Println("-----")
 
-	// Using the range operator
+	// Using the range operator // HL
 	for index, name := range dwarves {
 		fmt.Println(index, name)
 	}

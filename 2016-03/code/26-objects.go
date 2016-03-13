@@ -14,7 +14,7 @@ func (point Point) Distance(q Point) float64 {
 }
 
 // START OMIT
-func (point *Point) ScaleBy(n float64) {
+func (point *Point) ScaleBy(n float64) { // HL
 	point.X *= n
 	point.Y *= n
 }
@@ -22,11 +22,12 @@ func (point *Point) ScaleBy(n float64) {
 func main() {
 	var p = Point{3, 5}
 
-	fmt.Println(p)
-	p.ScaleBy(3)
-	fmt.Println(p)
+	fmt.Println("Before:", p)
+	p.ScaleBy(3) // HL
+	fmt.Println("After:", p)
 
-	fmt.Println(p.Distance(Point{1, 0}))
+	dist := p.Distance(Point{1, 0})
+	fmt.Println(dist)
 }
 
 // END OMIT

@@ -25,16 +25,16 @@ func double(x interface{}) interface{} {
 // DOUBLEEND OMIT
 
 // DOUBLESWITCHSTART OMIT
-func double2(x interface{}) interface{} {
+func triple(x interface{}) interface{} {
 	switch x := x.(type) {
 	case int:
-		return x * 2
+		return x * 3
 	case float32:
-		return x * 2
+		return x * 3
 	case float64:
-		return x * 2
+		return x * 3
 	case *int:
-		return *x * 2
+		return *x * 3
 	default:
 		log.Printf("unsupported type: %T\n", x)
 	}

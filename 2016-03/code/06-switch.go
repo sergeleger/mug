@@ -1,16 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func today() string {
-	return "Tuesday"
+	return time.Now().Format("Monday")
 }
 
 func main() {
 	dayOfWeek := today()
 
 	switch dayOfWeek {
-	case "Saturday", "Sunday":
+	case "Saturday", "Sunday": // HL
 		fmt.Println("It's the weekend!")
 
 	default:

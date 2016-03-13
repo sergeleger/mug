@@ -1,6 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+	"unsafe"
+)
+
+func slicePtr(s []int) string {
+	hdr := (*reflect.SliceHeader)(unsafe.Pointer(&s))
+	return fmt.Sprintf("0x%X", hdr.Data)
+}
 
 func main() {
 	var ids = make([]int, 0, 10)

@@ -1,10 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 // START OMIT
-func sum(numbers ...int) (total int) {
-	fmt.Printf("%T len=%d\n", numbers, len(numbers))
+func sum(numbers ...int) (total int) { // HL
+	log.Printf("%T len=%d\n", numbers, len(numbers))
+
 	for _, v := range numbers {
 		total += v
 	}
@@ -12,8 +16,8 @@ func sum(numbers ...int) (total int) {
 }
 
 func main() {
-	fmt.Println(sum())
-	fmt.Println(sum(2, 4, 6, 8, 10))
+	fmt.Println("Sum is", sum())
+	fmt.Println("Sum is", sum(2, 4, 6, 8, 10))
 }
 
 // END OMIT

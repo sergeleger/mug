@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // START OMIT
-func max(x int, y int) int {
+func max(x int, y int) int { // HL
 	if x > y {
 		return x
 	} else {

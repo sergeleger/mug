@@ -1,19 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-func today() (string, int) {
-	return "Tuesday", 2
+func today() string {
+	return time.Now().Format("Monday")
+}
+
+func week() int {
+	_, n := time.Now().ISOWeek()
+	return n
 }
 
 func main() {
-	dayOfWeek, weekNumber := today()
+	dayOfWeek := today()
+	weekNumber := week()
 
 	switch {
-	case dayOfWeek == "Saturday" || dayOfWeek == "Sunday":
+	case dayOfWeek == "Saturday" || dayOfWeek == "Sunday": // HL
 		fmt.Println("It's the weekend!")
 
-	case dayOfWeek == "Tuesday" && weekNumber%2 == 0:
+	case dayOfWeek == "Tuesday" && weekNumber%2 == 0: // HL
 		fmt.Println("Payday!")
 
 	default:

@@ -1,16 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 // START OMIT
 func sum(numbers ...int) (total int) {
-	defer fmt.Printf("Deferred? %T len=%d\n", numbers, len(numbers))
+	defer log.Printf("Deferred? %T len=%d\n", numbers, len(numbers)) // HL
+
 	for _, v := range numbers {
-		defer fmt.Println(v, total)
+		defer log.Println(v, total) // HL
 		total += v
 	}
 
-	fmt.Println("leaving sum()")
+	log.Println("leaving sum()")
 	return
 }
 

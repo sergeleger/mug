@@ -20,13 +20,15 @@ func (point *Point) ScaleBy(n float64) {
 
 // START OMIT
 type ColoredPoint struct {
-	Point
+	Point // HL
 	Color string
 }
 
 func main() {
 	cpRed := ColoredPoint{Point{1, 2}, "red"}
-	cpBlue := ColoredPoint{Point{2, 3}, "blue"}
+	cpBlue := ColoredPoint{Point{3, 6}, "blue"}
+
+	cpRed.ScaleBy(3) // ColoredPoint "inherits" the Point methods // HL
 
 	fmt.Println(cpRed.Distance(Point{1, 0}))
 	fmt.Println(cpBlue.Distance(Point{1, 0}))

@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // START OMIT
-func describe(v interface{}) {
+func describe(v interface{}) { // HL
 	fmt.Printf("(%T, %v)\n", v, v)
 }
 

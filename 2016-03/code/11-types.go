@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-type Color uint64
+type Color uint64 // HL
 
 func main() {
 	var red Color = 1

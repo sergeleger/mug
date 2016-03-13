@@ -13,9 +13,9 @@ func someFunction() int {
 
 func main() {
 	percent := someFunction()
-	if percent < 50 {
+	if percent < 50 { // HL
 		fmt.Println("You're just starting.")
-	} else {
+	} else { // HL
 		fmt.Println("Almost done.")
 	}
 }

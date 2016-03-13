@@ -11,7 +11,8 @@ func say(str string) {
 }
 
 func main() {
-	go say("Hello, World!")
+	go say("Hello, World!") // HL
+
 	say("All Done!")
 
 	time.Sleep(500 * time.Millisecond)

@@ -21,14 +21,15 @@ func coinFlip() string {
 
 func main() {
 	var heads, tails int
-	switch coinFlip() {
-	case "heads":
+
+	switch coinFlip() { // HL
+	case "heads": // HL
 		heads++
 
-	case "tails":
+	case "tails": // HL
 		tails++
 
-	default:
+	default: // HL
 		fmt.Println("landed on edge!")
 	}
 

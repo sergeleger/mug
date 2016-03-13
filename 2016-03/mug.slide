@@ -2,37 +2,50 @@ Introduction to Go
 Moncton User Group
 15 Mar 2016
 
-Serge Leger
+Serge Léger
 Prototype Developer, National Research Council
 @sergeleger
 
 * About Me
 
 - Bachelor of Computer Science from UdM.
-- Started my career in 1994 with a small local startup (Dovico)
-- Joined the public service in 1998 to help transition internal application to 2000+
-- In 2006?, joined National Research Council where I work with researchers in a number of different fields.
-- C, C++, PowerBuilder, Perl, MySQL, HTML+Javascript+CSS, Java, Python, Go
+- Started my career in 1994 with a local startup - Dovico.
+- Joined the public service in 1998 to help transition internal applications to Y2K.
+- In 2007, joined National Research Council where I work with researchers in a number of different fields.
+- C, C++, Perl, HTML+Javascript+CSS, Java, Python, Go
 
-* Me and Go
+* Go Language (golang)
 
-I've been using Go since 2012, started using it professional since early 2013.
+Go is:
 
-Researcher wanted to add server-like features to a C++ application,
+- Lightweight, avoids unnecessary repetition
+- Object Oriented, but not in the usual way
+- Concurrent, in a way that keeps you sane
+- Designed for working programmers
+- Compiled
+- Statically typed
+- Garbage collected
+- Cross platform (Linux, Mac OSX, Windows)
 
-### TODO COOL IMAGE OF WHAT?!
+* What's Missing
 
-So did a quick trial-balloon and rewrote the application in Go,
-
-### TODO chart LOC & Speed results AND unix Socket and TCP servers...
+- No type inheritance
+- No method or operator overloading
+- No generic programming
+- No exceptions
+- No pointer arithmetic
 
 * History
 
-- Started at Google by engineers frustrated with the complexity of C++
-- Those engineers are
-- Robert Griesemer
-- Rob Pike (Unicode?, ...)
-- Ken Thompson
+- Project starts at Google in 2007 by engineers frustrated with the complexity of C++
+- Open source release in November 2009
+- Version 1.0 in March 2012
+- Version 1.1 in May 2013
+- Version 1.2 in December 2013
+- Version 1.3 in June 2014
+- Version 1.4 in December 2014
+- *Version*1.5* in August 2015 - Compiler & tools now written in Go. GC is now concurrent.
+- Version 1.6 in February 2016
 
 * Tutorial
 
@@ -57,24 +70,17 @@ But these are the ones you'll use most often:
 
   int, float64, bool, byte, string, error
 
-Note: `int` and `uint` are the natural or most efficient size for integers on a particular platform, either 32 or 64 bits.
+`int` and `uint` are the natural or most efficient size for integers on a particular platform, either 32 or 64 bits.
+
+All types have a *zero*value*, which is used to initialize variables. `0` for numbers, `false` for booleans, `""` for strings and `nil` for everything else.
 
 * Variable Declaration
 
 .play code/02-hello-world-with-types.go
 
-### Use this page to show:
-## - implicit type declaration
-## - zero value for types
-## - short variable declaration
-## - some other types?
-## - unused variables
-
-* Celcius & Farenheit
-
-.play code/03-simple-temp.go
-
-## - talk about utf8 program files and unicode strings
+- implicit type declaration
+- short variable declaration
+- unused variables
 
 * Control Structures
 
@@ -86,9 +92,9 @@ A simple `if` statement:
         return y
     }
 
-- Braces are mandatory
-- The expression must evaluate to a boolean
-- There is also an optional `else` statement
+- Braces are mandatory, note the missing parentheses.
+- The expression must evaluate to a boolean.
+- There is also an optional `else` statement:
 
     if x > 0 {
         return y
@@ -110,7 +116,7 @@ A simple `if` statement:
         // Can't reach this condition?
     }
 
-- If statements can also contain an initialization statement:
+- `if` statements can also contain an initialization statement:
 
     if x = someFunction(); x == 0 {
         return z
@@ -212,7 +218,7 @@ or bit masks (from Go's `net` package)
         FlagMulticast
     )
 
-* Composite Types
+* Collections and Complex Types
 
 * Arrays
 
@@ -232,7 +238,7 @@ Arrays is a *fixed-length* sequence of zero or more elements. Since they are fix
     var ip = [...]byte{ 192, 168, 1, 1 }
 
 - The built-in `len` function returns the number of elements in the array.
-- Arrays are passed by value, so use with care.
+- Arrays are always passed by value, so use with care.
 
 * Arrays (playground)
 
@@ -297,15 +303,23 @@ Maps must be created using the `make` built-in function:
 
 * Structures
 
-A structure is a sequence of fields, each of which has a name and a type.
+A structure is a sequence of fields, each of which has a name, a type and optionally a `field tag` which is metadata encoded in key/value pairs.
 
-.play code/18-struct.go  /START OMIT/,/END OMIT/
+.code code/18-struct.go  /START OMIT/,/END OMIT/
+
+* Structures (playground)
+
+.play code/18-struct.go  /MAIN OMIT/,/MAINEND OMIT/
 
 * Embedding structures
 
-Go does not have inheritance, instead, we use type composition:
+Go does not have inheritance, instead, we can use type composition:
 
-.play code/19-struct.go /START OMIT/,/END OMIT/
+.code code/19-struct.go /START OMIT/,/END OMIT/
+
+* Embedding structures (playground)
+
+.play code/19-struct.go /MAIN OMIT/,/MAINEND OMIT/
 
 * Functions
 
@@ -331,7 +345,7 @@ Functions can return multiple values, this is often used to return error conditi
 
 * Closures
 
-.play code/22-functions.go /START3 OMIT/,/END3 OMIT/
+.play code/22-functions.go /START3 OMIT/,/END3 OMIT/ HLnew
 
 * Variadic functions
 
@@ -339,19 +353,13 @@ Functions can return multiple values, this is often used to return error conditi
 
 * Deferred Functions
 
-The execution of a function can be deferred until the enclosing function returns. This is normally used with paired operations like open and close or lock and unlock.
+The execution of a function can be deferred until the enclosing function returns. This is normally used with paired operations like *open/close* or *lock/unlock*.
 
-    func readFile(filename string) {
-        fh, err := os.Open(filename)
-        if err != nil {
-            return
-        }
-        defer fh.Close()
-
-        // ... process file ...
-    }
+.code code/24-defer.go /START OMIT/,/END OMIT/
 
 * Deferred example
+
+Deferred calls are stacked, so deferred functions are called in LIFO order:
 
 .play code/24-functions.go /START OMIT/,/END OMIT/
 
@@ -391,12 +399,12 @@ The `Point.Distance` method uses a pass-by-value receiver meaning that any chang
 Interfaces in Go are similar to interfaces from Java. Here is a generic interface definition:
 
     type Name interface {
-        // List of functions
+        // List of functions ...
         fnName1(parameter-list) (result-list)
         fnName2(parameter-list) (result-list)
         fnName3(parameter-list) (result-list)
 
-        // List of other interfaces
+        // ...or list of other interfaces
         InterfaceName2
     }
 
@@ -405,19 +413,7 @@ Interfaces in Go are similar to interfaces from Java. Here is a generic interfac
 
 * Interfaces from Go's io package
 
-    type Reader interface {
-        Read(p []byte) (n int, err error)
-    }
-
-    type Closer interface {
-        Close() error
-    }
-
-    // Interface embedding
-    type ReadCloser interface {
-        Reader
-        Closer
-    }
+.code code/28-io.go /START OMIT/,/END OMIT/
 
 * Implementation of the io.Reader interface
 
@@ -475,15 +471,15 @@ Go provides:
 - synchronization and messaging (channels)
 - multi-way concurrent control (select)
 
-* Concurrency vs Parallelism
-
-Concurrency is about dealing with lots of things at once.
-
-Parallelism is about doing lots of things at once.
-
-Concurrency is about structure, parallelism is about execution.
-
-Concurrency provides a way to structure a solution to solve a problem that may (but not necessarily) be parallelizable.
+## * Concurrency vs Parallelism
+##
+## Concurrency is about dealing with lots of things at once.
+##
+## Parallelism is about doing lots of things at once.
+##
+## Concurrency is about structure, parallelism is about execution.
+##
+## Concurrency provides a way to structure a solution to solve a problem that may (but not necessarily) be parallelizable.
 
 * Goroutines are not threads
 
@@ -546,6 +542,10 @@ Go also has a package `sync` and `sync/atomic` that provides regular synchroniza
 
 * Packages
 
+* Package Construction
+
+- 
+
 - import path
 - `init()` function
 
@@ -555,9 +555,16 @@ Go also has a package `sync` and `sync/atomic` that provides regular synchroniza
 - go fmt
 - go test
 
+* Advanced Topics
+
+* Strings
+
+A slice of UTF8 encoded bytes.
+
 * References
 
 - The Go Programming Language, Alan A. A. Donovan & Brian W. Kernighan
-- https://tour.golang.org/
-- https://golang.org/doc/effective_go.html
-- https://golang.org/ref/spec
+- [[https://tour.golang.org/][https://tour.golang.org/]]
+- [[https://golang.org/doc/effective_go.html][https://golang.org/doc/effective_go.html]]
+- [[https://golang.org/ref/spec][https://golang.org/ref/spec]]
+- [[https://golang.org/pkg][https://golang.org/pkg]]

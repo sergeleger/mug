@@ -1,29 +1,44 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
+
+var _ = json.Marshal
 
 // START OMIT
 type Person struct {
-	Name   string
-	Street string
-	City   string
+	Name   string `json:"name"`
+	Street string `json:"street"`
+	City   string `json:"city"`
 }
 
+// END OMIT
+
+var fmtString = "%-10s\t%-10s\n"
+
+// MAIN OMIT
 func main() {
-	var bob Person
+	var bob Person // HL
 	bob.Name = "Bob"
 	bob.Street = "123 Street"
-	bob.City = "Somewhere, OH"
+	bob.City = "Somewhere"
 
 	// Using struct literals
-	var charles = Person{
+	var charles = Person{ // HL
 		Name:   "Chuck",
 		Street: "456 Street",
-		City:   "Somecity, ME",
+		City:   "Somecity",
 	}
 
-	fmt.Printf("%+v\n", bob)
-	fmt.Printf("%+v\n", charles)
+	fmt.Printf(fmtString, "Bob", "Charles")
+	fmt.Printf(fmtString, "------------", "------------")
+	fmt.Printf(fmtString, bob.Name, charles.Name)     // HL
+	fmt.Printf(fmtString, bob.Street, charles.Street) // HL
+	fmt.Printf(fmtString, bob.City, charles.City)     // HL
+
+	// fmt.Printf("%+v\n", bob)
 }
 
-//END OMIT
+// MAINEND OMIT

@@ -9,9 +9,9 @@ var _ = json.Marshal
 
 // START OMIT
 type Person struct {
-	Name   string `json:"name"`
-	Street string `json:"street"`
-	City   string `json:"city"`
+	Name   string
+	Street string
+	City   string
 }
 
 // END OMIT

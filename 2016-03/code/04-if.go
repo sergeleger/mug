@@ -14,8 +14,8 @@ func someFunction() int {
 func main() {
 	percent := someFunction()
 	if percent < 50 { // HL
-		fmt.Println("You're just starting.")
+		fmt.Println("You're just starting.", percent)
 	} else { // HL
-		fmt.Println("Almost done.")
+		fmt.Println("Almost done.", percent)
 	}
 }

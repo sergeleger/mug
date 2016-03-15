@@ -1,0 +1,14 @@
+$GOPATH/
+└── src
+    └── pt
+        ├── ioutil
+        │   ├── colreader.go
+        │   ├── colreader_test.go
+        │   ├── cpuprofile.go
+        │   ├── io.go
+        │   ├── randseed.go
+        │   ├── reader.go
+        │   ├── reader_test.go
+        │   ├── traceprofile.go
+        │   ├── writer.go
+        │   └── writer_test.go

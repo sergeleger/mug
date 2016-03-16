@@ -1,6 +1,8 @@
 package main
 
 import "fmt"
+import "os"
+import "io"
 
 // START OMIT
 type myReader uint8
@@ -21,7 +23,7 @@ func main() {
 
 	fmt.Println(buf)
 
-	// io.Copy(os.Stdout, reader)
+	io.Copy(os.Stdout, reader)
 }
 
 // END OMIT

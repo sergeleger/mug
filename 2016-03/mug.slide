@@ -4,7 +4,7 @@ Moncton User Group
 
 Serge Léger
 Prototype Developer, National Research Council
-https://github.com/sergeleger/mug/2016-03
+https://github.com/sergeleger/mug
 @sergeleger
 
 * About Me
@@ -26,7 +26,7 @@ Go is:
 - Compiled
 - Statically typed
 - Garbage collected
-- Cross platform (Linux, Mac OSX, Windows)
+- Cross platform (Linux, Mac OSX, Windows, iOS, Android)
 
 * What's Missing
 

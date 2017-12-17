@@ -4,6 +4,7 @@ Moncton User Group
 
 Serge Léger
 Prototype Developer, National Research Council
+https://github.com/sergeleger/mug
 @sergeleger
 
 * About Me
@@ -25,7 +26,7 @@ Go is:
 - Compiled
 - Statically typed
 - Garbage collected
-- Cross platform (Linux, Mac OSX, Windows)
+- Cross platform (Linux, Mac OSX, Windows, iOS, Android)
 
 * What's Missing
 
@@ -33,7 +34,6 @@ Go is:
 - No method or operator overloading
 - No generic programming
 - No exceptions
-- No pointer arithmetic
 
 * History
 
@@ -60,15 +60,15 @@ Go is:
 
 Go has many simple types:
 
-  int, int8, int16, int32, int64
-  uint, uint8, uint16, uint32, uint64, uintptr
-  float32, float64
-  complex64, complex128
-  bool, byte, rune, string, error
+    int, int8, int16, int32, int64
+    uint, uint8, uint16, uint32, uint64, uintptr
+    float32, float64
+    complex64, complex128
+    bool, byte, rune, string, error
 
 But these are the ones you'll use most often:
 
-  int, float64, bool, byte, string, error
+    int, float64, bool, byte, string, error
 
 `int` and `uint` are the natural or most efficient size for integers on a particular platform, either 32 or 64 bits.
 
@@ -118,8 +118,8 @@ A simple `if` statement:
 
 - `if` statements can also contain an initialization statement:
 
-    if x = someFunction(); x == 0 {
-        return z
+    if x = someFunction(); x != 0 {
+        return z*x
     }
 
 * If statement (playground)
@@ -137,13 +137,13 @@ A simple C-like `switch` statement:
 
 * Switch statement (continued)
 
-- Instead of using `fallthrough`, case statements can be combined:
+Instead of using `fallthrough`, case statements can be combined:
 
 .play code/06-switch.go /func main/,/^}/
 
 * Switch statement (continued)
 
-- The switch's expression is optional, so a switch statement can be used to replace long and complex `if`/`else` cascades:
+The switch's expression is optional, so a `switch` statement can be used to replace long and complex `if`/`else` cascades:
 
 .play code/07-switch.go /func main/,/^}/
 
@@ -246,7 +246,7 @@ Arrays is a *fixed-length* sequence of zero or more elements. Since they are fix
 
 * Slices
 
-Slices represents variable-length sequences, like arrays, slices are indexable and have a length.
+Slices represents variable-length sequences, like arrays, slices are indexable and have a length. Slices have another property: capacity. When a slice reaches its capacity, the Go runtime allocates more memory.
 
     // An IP address, using slices
     var ip []byte
@@ -303,7 +303,7 @@ Maps must be created using the `make` built-in function:
 
 * Structures
 
-A structure is a sequence of fields, each of which has a name, a type and optionally a `field tag` which is metadata encoded in key/value pairs.
+A structure is a sequence of fields, each of which has a name, a type and optionally a `field`tag` which is metadata encoded in key/value pairs.
 
 .code code/18-struct.go  /START OMIT/,/END OMIT/
 
@@ -311,9 +311,16 @@ A structure is a sequence of fields, each of which has a name, a type and option
 
 .play code/18-struct.go  /MAIN OMIT/,/MAINEND OMIT/
 
-* Embedding structures
+* Embedding structures and anonymous fields
 
-Go does not have inheritance, instead, we can use type composition:
+Instead of doing the following (which says `Employee` as a field named `Person` of type `Person`):
+
+    type Employee struct {
+        Person Person
+        Id     string
+    }
+
+We can omit the field name, this provides a convenient shortcut that allows the following shorter notation: `Employee.Name` instead of `Employee.Person.Name`.
 
 .code code/19-struct.go /START OMIT/,/END OMIT/
 
@@ -413,7 +420,7 @@ Interfaces in Go are similar to interfaces from Java. Here is a generic interfac
 
 * Interfaces from Go's io package
 
-.code code/28-io.go /START OMIT/,/END OMIT/
+.code assets/go-interfaces.txt /START OMIT/,/END OMIT/
 
 * Implementation of the io.Reader interface
 
@@ -433,7 +440,7 @@ Interfaces in Go are similar to interfaces from Java. Here is a generic interfac
 
 * Empty Interface
 
-An empty interface is an interface with no methods -- meaning that everything in Go satisfies the empty interface. This is similar to Java's `Object`. The interface type is written `interface{}`:
+An empty interface is an interface with no methods -- meaning that everything in Go satisfies the empty interface. This is similar to Java's `Object`. The empty interface type is written `interface{}`:
 
     var f interface{}
 
@@ -542,24 +549,77 @@ Go also has a package `sync` and `sync/atomic` that provides regular synchroniza
 
 * Packages
 
+* Workspace Organization
+
+The only configuration most users ever need is the GOPATH environment variable.
+
+    export GOPATH=$HOME/projects/pivottable
+
+The GOPATH variable is similar to Java's CLASSPATH variable and can contain more than one entry, seperated by `:` (or `;` on Windows).
+
+A workspace contains at least one directory `src` which contains your project's source files (and third-party packages you may have installed). The Go tools will generate two other directories:
+
+- `bin` contains your project's executable files
+- `pkg` contains the compiled packages
+
+
 * Package Construction
 
-- 
+.code assets/directory.txt
 
-- import path
-- `init()` function
+In the example above, the pivottable project defines the following packages:
 
-* Go tools
+    import "pt"
+    import "pt/ioutil"
+    import "pt/report"
+    import "pt/report/text"
 
-- go run
-- go fmt
-- go test
+* Package Construction
 
-* Advanced Topics
+A package is defined by one or more `.go` files, each declaring the same package namespace using the `package` statement.
 
-* Strings
+By convention, the directory name and the package name are the same, but it's not a requirement.
 
-A slice of UTF8 encoded bytes.
+.code assets/ioutil-contents.txt
+
+
+* Import Paths
+
+    import (
+        "fmt"
+        "pt/ioutil"
+        "github.com/ckeekybits/is"
+        "google.golang.org/api/calendar/v3" // actual package name is "calendar"
+    )
+
+Import paths are only strings and have no meaning to the Go language, they're only used for looking up packages.
+
+Go tools will use `GOROOT` and `GOPATH` to find the actual packages:
+
+    $GOROOT/src/fmt
+
+    $GOPATH/src/pt/ioutil
+    $GOPATH/src/github.com/ckeekybits/is
+    $GOPATH/src/google.golang.org/api/calendar/v3
+
+* Standard Library
+
+Go's standard library has about 150 packages:
+
+- Input/Output (bufio, io, os, path, path/filepath)
+- Networking (net, net/http)
+- Types (strings, bytes, errors, time, strconv)
+- Testing (testing)
+- Reflection (reflect)
+- Regular Expression (regexp)
+- Many more... [[https://golang.org/pkg/][https://golang.org/pkg/]]
+
+## * Go Tools
+##
+## - *go*run* - runs a Go "script" without explicitly building an executable.
+## - *go*b
+## - *gofmt* -
+## - go test
 
 * References
 

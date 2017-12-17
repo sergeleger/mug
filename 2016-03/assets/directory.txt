@@ -1,0 +1,10 @@
+$GOPATH/
+├── bin
+├── pkg
+└── src
+    └── pt  // HL
+        ├── cmd // HL
+        │   └── pivottable // HL
+        ├── ioutil // HL
+        └── report // HL
+            └── text // HL

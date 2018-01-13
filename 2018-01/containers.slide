@@ -1,0 +1,85 @@
+What are Containers?
+16 Jan 2018
+
+Serge Léger
+Prototype Developer, National Research Council
+https://github.com/sergeleger
+@sergeleger
+
+* So... what are containers?
+
+: Jails
+: Namespaces
+: Cgroups
+: Light-weight virtualization
+: Process isolation
+: Docker
+
+* Definitions
+
+- "... operating system feature(s) in which the kernel allows the existence of multiple isolated user-space instances."
+
+.caption [[https://en.wikipedia.org/wiki/Operating-system-level_virtualization][Operating-system-level virtualization]], Wikipedia
+
+- "A container image is a lightweight, stand-alone, executable package of a piece of software that includes everything needed to run it: code, runtime, system tools, system libraries, settings."
+
+.caption [[https://www.docker.com/what-container][What is a container]], Docker
+
+- "LinuX Containers (LXC) combines the kernel's *cgroups* and support for isolated *namespaces* to provide an isolated environment for applications."
+
+.caption [[https://en.wikipedia.org/wiki/LXC][LXC]], Wikipedia
+
+: Mostly concentrating on LXC
+: I'm not a big Docker user.
+: Mostly, because I didn't know the trade-offs.
+: Until...
+
+* Liz Rice - Inspiration for this talk
+
+- Golang UK Conf. 2016 - Liz Rice - What is a container, really? Let's write one in Go from scratch [[https://www.youtube.com/watch?v=HPuvDm8IC-4]]
+- Building a container from scratch in Go - Liz Rice (Microscaling Systems), [[https://www.youtube.com/watch?v=Utf-A4rODH8]]
+- [[https://twitter.com/lizrice][@lizrize]]
+
+
+* Let's build a container
+
+* Namespaces
+
+Control what a process can see.
+
+- PID (process table)
+- UTS (unix timeshare)
+- Mount
+- Network
+- IPC (inter-process communication)
+- User (Linux users and groups)
+- Cgroup (control groups)
+
+* Cgroups
+
+Control what a process can use.
+
+- Memory
+- CPU
+- CPU Accounting
+- CPU Sets
+- PIDs
+- Blkio
+- Devices
+- Net_prio
+- Freezer
+
+: these are controllers
+: blkio -> block IO controller
+: cpuacct -> cpu accounting
+: net_prio -> network priority 
+
+
+* Docker Images
+
+.image assets/container-layers.jpg
+
+
+* Networking
+
+.image assets/NS-intro.png
